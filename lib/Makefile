@@ -1,4 +1,4 @@
-BINPATH=~/sat/bin
+BINPATH=~/bin/gcc-arm-none-eabi-4_7-2013q1/bin
 
 CC=$(BINPATH)/arm-none-eabi-gcc
 AR=$(BINPATH)/arm-none-eabi-ar

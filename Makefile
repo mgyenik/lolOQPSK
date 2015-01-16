@@ -22,7 +22,7 @@ endif
 
 ###################################################
 
-BINPATH=~/sat/bin
+BINPATH=~/bin/gcc-arm-none-eabi-4_7-2013q1/bin
 CC=$(BINPATH)/arm-none-eabi-gcc
 OBJCOPY=$(BINPATH)/arm-none-eabi-objcopy
 SIZE=$(BINPATH)/arm-none-eabi-size
@@ -63,6 +63,8 @@ lib:
 	$(MAKE) -C lib FLOAT_TYPE=$(FLOAT_TYPE)
 
 proj: 	$(OUTPATH)/$(PROJ_NAME).elf
+
+burn:
 
 $(OUTPATH)/$(PROJ_NAME).elf: $(SRCS)
 	$(CC) $(CFLAGS) $^ -o $@ -Llib -lstm32f4 -lm
