@@ -17,7 +17,7 @@ void dac_test();
 int main(void) {
 	init();
 
-	calculation_test();
+	//calculation_test();
 	dac_test();
 
 	for(;;) {
@@ -28,10 +28,25 @@ int main(void) {
 }
 
 void dac_test() {
+	uint32_t lvl1, lvl2;
+	float i;
+	lvl2 = 0;
+	i = -M_PI/2.0f;
 	for(;;) {
-		for (float i = 0;i < 2.0 * M_PI;i += (2.0 * M_PI) / 100.0) {
-			DAC_SetChannel1Data(DAC_Align_12b_R, (uint32_t)((sinf(i) + 1.0) * 2047.0));
-		}
+
+		lvl1 = (uint32_t)((sinf(i) + 1.0) * 2047.0);
+
+		DAC_SetChannel1Data(DAC_Align_12b_R, lvl1);
+		DAC_SetChannel2Data(DAC_Align_12b_R, lvl2);
+
+		if (i >= 1.5*M_PI)
+			i = -M_PI/2.0f;
+
+		if (lvl2 > 4096)
+			lvl2 = 0;
+			
+		lvl2 += (uint32_t)(4096.0f/100.0f);
+		i += 2*M_PI/100.0f;
 	}
 }
 
@@ -124,6 +139,7 @@ void init() {
 	DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
 	DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Disable;
 	DAC_Init(DAC_Channel_1, &DAC_InitStructure);
+	DAC_Init(DAC_Channel_2, &DAC_InitStructure);
 
 	// IO
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
@@ -136,6 +152,12 @@ void init() {
 
 	// Set DAC Channel1 DHR12L register
 	DAC_SetChannel1Data(DAC_Align_12b_R, 0);
+
+	// Enable DAC Channel1
+	DAC_Cmd(DAC_Channel_2, ENABLE);
+
+	// Set DAC Channel2 DHR12L register
+	DAC_SetChannel2Data(DAC_Align_12b_R, 0);
 }
 
 /*
