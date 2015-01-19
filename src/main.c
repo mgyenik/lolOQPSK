@@ -11,13 +11,11 @@ volatile uint32_t time_var1, time_var2;
 // Private function prototypes
 void Delay(volatile uint32_t nCount);
 void init();
-void calculation_test();
 void dac_test();
 
 int main(void) {
 	init();
 
-	//calculation_test();
 	dac_test();
 
 	for(;;) {
@@ -45,33 +43,8 @@ void dac_test() {
 		if (lvl2 > 4096)
 			lvl2 = 0;
 			
-		lvl2 += (uint32_t)(4096.0f/100.0f);
-		i += 2*M_PI/100.0f;
-	}
-}
-
-void calculation_test() {
-	float a = 1.001;
-	int iteration = 0;
-
-	for(;;) {
-		GPIO_SetBits(GPIOD, GPIO_Pin_12);
-		Delay(500);
-		GPIO_ResetBits(GPIOD, GPIO_Pin_12);
-		Delay(500);
-
-		time_var2 = 0;
-		for (int i = 0;i < 1000000;i++) {
-			a += 0.01 * sqrtf(a);
-		}
-
-		printf("Time:      %lu\n", time_var2);
-		printf("Iteration: %i\n", iteration);
-		printf("Value:     %lu\n", (unsigned long)a);
-//		printf("Value F:   %.5f\n", -a);
-		printf("Value F2:  %s\n\n", ftostr(-a, 5));
-
-		iteration++;
+		lvl2 += (uint32_t)(4096.0f/1000.0f);
+		i += 2*M_PI/1000.0f;
 	}
 }
 
